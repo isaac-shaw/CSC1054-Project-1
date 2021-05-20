@@ -36,9 +36,8 @@ public class project1 extends Application{
    Scene scene;
    Canvas image = new Canvas();
    GraphicsContext gc = image.getGraphicsContext2D();
-   
-   int[][] maze = new int[21][21];
-   int start = 0, end = 0, playerX, playerY, proX, proY;
+   int[][] maze = new int[21][21];//2DArray that holds the maze in a coordinate system
+   int start = 0, end = 0, playerX, playerY, proX, proY; //Pro Coords are where the player wants to go
    
    public void start(Stage stage){
       //Read in Maze file and put it in a 2D array with a try/catch
@@ -62,11 +61,9 @@ public class project1 extends Application{
             if(maze[j][i] == 0){
                gc.setFill(Color.WHITE);
                gc.fillRect(j*25, i*25, 25, 25);
+               //Find starting X Coord
                if(i == 0){
                   start = j;
-               }
-               if(i == 20){
-                  end = j;
                }
             }else if(maze[j][i] == 1){
                gc.setFill(Color.BLACK);
@@ -98,10 +95,9 @@ public class project1 extends Application{
       
       //Request Focus
       root.requestFocus();
-      //root.setOnKeyPressed(new KeyPressedHandler());
    }
    
-   //Key Handler Class for awsd
+   //Key Handler Class for arrow keys
    public class KeyPressedHandler implements EventHandler<KeyEvent>{
       public void handle(KeyEvent e){
          switch(e.getCode()){
@@ -138,27 +134,29 @@ public class project1 extends Application{
       }
    }
    
-   //Refresh Player method: Takes 
+   //Refresh Player method
    public void refresh(){
+      //Clears Player's current location
       gc.clearRect(25*playerX, 25*playerY, 25, 25);
-                  
+      
+      //Updates current location to new loaction
       playerX = proX;
       playerY = proY;
-
+      
+      //Redraws character
       gc.fillRect(25*playerX, 25*playerY, 25, 25);
    }
    
    
    public boolean valid(int checkProX, int checkProY){
-      
+      //Try Catch for out of bounds moves
       try{
-         if(checkProY == 20 && maze[checkProX][20] == 0){
-            
-            System.out.println("YOU WIN!!");
-            
-         }
-         
+         //Check if future location is valid (not a border), if vaild: return true
          if(maze[checkProX][checkProY] == 0){
+            //If at the bottom, print the winning statement
+            if(checkProY == 20){
+               System.out.println("YOU WIN!!");
+            }
             return true;
          }else{
             System.out.println("Cannot go through boundaries (black spaces)");
